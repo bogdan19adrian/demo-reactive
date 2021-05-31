@@ -1,0 +1,26 @@
+version: '2.2'
+services:
+  mongodb:
+    image: mongo:3.6.22-xenial
+    container_name: mongodb-demo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=demo
+      - MONGO_INITDB_ROOT_PASSWORD=demo
+      - MONGO_INITDB_DATABASE=demo
+#    volumes:
+#      - ./mongodb/data/db:/data/db
+    networks:
+      - mongodb_network
+    ports:
+      - 27017:27017
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/test --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 3
+volumes:
+  mongodb-data:
+    name: mongodb-data
+networks:
+  mongodb_network:
+    name: mongodb_network
